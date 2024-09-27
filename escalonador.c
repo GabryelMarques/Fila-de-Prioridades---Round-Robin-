@@ -55,14 +55,14 @@ void criarVetorFilas(Fila filas[]) {
     }
 }
 void escalonador(Fila filas[], int quantum) {
-    int ciclo = 1;  // Contador de ciclo para impressão das interações
+    int troca = 1;  // Contador de troca para impressão das interações
 
     // Iterar sobre as filas em ordem de prioridade
     for (int i = 0; i < 4; i++) {
         // Enquanto houver processos na fila de prioridade `i`
         while (filas[i].inicio != NULL) {
-            printf("Ciclo %d: Executando processo %d da fila de prioridade %d. Tempo restante: %d\n", 
-                   ciclo, filas[i].inicio->id, i, filas[i].inicio->tempo_cpu);
+            printf("Troca %d: Executando processo %d da fila de prioridade %d. Tempo restante: %d\n", 
+                   troca, filas[i].inicio->id, i+1, filas[i].inicio->tempo_cpu);
 
             // Subtrai o quantum do tempo de CPU do processo
             filas[i].inicio->tempo_cpu -= quantum;
@@ -79,7 +79,19 @@ void escalonador(Fila filas[], int quantum) {
                 }
 
                 // Imprime que o processo foi finalizado
-                printf("Processo %d finalizado.\n", processo_finalizado->id);
+                // Códigos ANSI para cores
+                #define RESET   "\033[0m"
+                #define RED     "\033[31m"
+                #define GREEN   "\033[32m"
+
+                // Exibindo o processo finalizado com cor
+                printf(GREEN "╔════════════════════════════════════╗\n");
+                printf("║         Processo Finalizado        ║\n");
+                printf("╠════════════════════════════════════╣\n");
+                printf("║         Processo ID: %d             ║\n", processo_finalizado->id);
+                printf("╚════════════════════════════════════╝" RESET "\n");
+
+
                 free(processo_finalizado);  // Libera a memória do processo finalizado
             } else {  // Se o processo não terminou, ele volta para o final da fila
                 filas[i].fim->prox = filas[i].inicio;
@@ -88,37 +100,38 @@ void escalonador(Fila filas[], int quantum) {
                 filas[i].fim->prox = filas[i].inicio;     // Manter a lista circular
             }
 
-            ciclo++;  // Incrementa o número de ciclos (interações)
+            troca++;  // Incrementa o número de trocas (interações)
         }
     }
 
-    printf("Todos os processos foram concluídos.\n");
+    printf("Todos os processos foram concluidos.\n");
 }
 #include <stdio.h>
 #include <stdlib.h>
 
-// Função para exibir todos os processos organizados por fila
+// Função para exibir todos os processos organizados por fila com caracteres especiais
 void exibirProcessosPorFila(Fila filas[]) {
-    printf("===================================================================\n");
-    printf("| Fila de Prioridade | ID do Processo | Tempo CPU | Quantum | Estado |\n");
-    printf("===================================================================\n");
+    printf("╔════════════════════╦═══════════════════╦════════════╦══════════╦═════════╗\n");
+    printf("║ Fila de Prioridade ║ ID do Processo    ║ Tempo CPU  ║ Quantum  ║ Estado  ║\n");
+    printf("╠════════════════════╬═══════════════════╬════════════╬══════════╬═════════╣\n");
 
     for (int i = 0; i < 4; i++) {
         PCB* atual = filas[i].inicio;
         
         if (atual == NULL) {
-            printf("|       %d           |     -          |    -      |    -    |   -    |\n", i);
+            printf("║        %d           ║       -           ║     -      ║    -     ║   -     ║\n", i + 1);
         } else {
             do {
-                printf("|       %d           |     %d          |    %d     |    %d    |   %d   |\n", 
-                       i+1, atual->id, atual->tempo_cpu, atual->quantum, atual->estado);
+                printf("║        %d           ║       %d           ║    %d      ║   %d     ║   %d     ║\n", 
+                       i + 1, atual->id, atual->tempo_cpu, atual->quantum, atual->estado);
                 atual = atual->prox;
             } while (atual != filas[i].inicio); // Continua até voltar ao início da fila (circular)
         }
     }
 
-    printf("===================================================================\n");
+    printf("╚════════════════════╩═══════════════════╩════════════╩══════════╩═════════╝\n");
 }
+
 
 // Função para gerar processos aleatórios e inserir nas filas correspondentes
 void gerarProcessosAleatorios(Fila filas[], int num_processos, int min_tempo_cpu, int max_tempo_cpu, int quantum) {

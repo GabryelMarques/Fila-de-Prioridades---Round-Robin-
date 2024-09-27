@@ -27,6 +27,14 @@ O objetivo deste projeto é implementar o escalonamento de processos por Fila de
 ## Linguagem Utilizada
 - **C**: O código foi desenvolvido utilizando C, conforme solicitado no trabalho.
 
+## Configuração do terminal (PowerShell)
+- Para usar UTF-8 no PowerShell:
+
+- Abra o PowerShell.
+- Digite o seguinte comando para mudar a codificação para UTF-8:
+- [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+
 ## Instruções para Execução
 1. Clone este repositório:
    ```bash

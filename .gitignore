@@ -58,6 +58,7 @@ dkms.conf
 *.o
 *.exe
 *.out
+*.output
 
 # Ignorar o PDF de rascunho do trabalho
 TrabalhoPrático1 (1).pdf
